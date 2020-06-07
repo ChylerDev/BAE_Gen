@@ -1,5 +1,3 @@
-extern crate bae_rs;
-
 #[cfg(test)]
 mod tests {
     use bae_rs::debug::*;
