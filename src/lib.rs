@@ -4,7 +4,7 @@
 //! sawtooth, square, white noise, and more.
 
 #![warn(missing_docs)]
-#![doc(html_root_url = "https://docs.rs/bae_rs/0.13.2")]
+#![doc(html_root_url = "https://docs.rs/bae_gen/0.14.0")]
 
 // pub mod mono_wav;
 pub mod noise;
