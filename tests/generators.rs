@@ -7,8 +7,8 @@ mod tests {
     const SAMPLE_RATE: usize = 48_000;
     const INV_SAMPLE_RATE: MathT = 1.0 / SAMPLE_RATE as MathT;
 
-    pub fn samples_to_seconds(s: usize, r: MathT) -> std::time::Duration {
-        std::time::Duration::from_secs_f64(s as f64 * r as f64)
+    pub fn seconds_to_samples(s: std::time::Duration, r: MathT) -> usize {
+        (s.as_secs_f64() * r as f64).round() as usize
     }
 
     #[test]
