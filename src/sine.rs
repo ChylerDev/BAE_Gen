@@ -70,7 +70,7 @@ impl Generator for Sine {
 }
 
 impl BlockGenerator for Sine {
-    fn process(&mut self, x: &mut[SampleT]) {
+    fn process_block(&mut self, x: &mut[SampleT]) {
         for s in x {
             let k = self.ind.floor();
             let g = self.ind - k;

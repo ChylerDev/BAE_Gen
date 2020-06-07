@@ -29,7 +29,7 @@ impl Generator for Noise {
 }
 
 impl BlockGenerator for Noise {
-    fn process(&mut self, x: &mut[SampleT]) {
+    fn process_block(&mut self, x: &mut[SampleT]) {
         use rand::Rng;
 
         for s in x {

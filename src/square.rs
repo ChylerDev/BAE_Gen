@@ -48,7 +48,7 @@ impl Generator for Square {
 }
 
 impl BlockGenerator for Square {
-    fn process(&mut self, x: &mut[SampleT]) {
+    fn process_block(&mut self, x: &mut[SampleT]) {
         for s in x {
             *s = if self.ind >= self.inv && self.ind < 2.0 * self.inv {
                 -1.0

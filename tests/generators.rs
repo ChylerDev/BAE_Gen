@@ -1,11 +1,15 @@
 #[cfg(test)]
 mod tests {
-    use bae_rs::debug::*;
-    use bae_rs::generators::*;
-    use bae_rs::*;
+    use bae_gen::*;
+    use bae_types::*;
+    use bae_debug::*;
 
     const SAMPLE_RATE: usize = 48_000;
-    const INV_SAMPLE_RATE: bae_rs::MathT = 1.0 / SAMPLE_RATE as bae_rs::MathT;
+    const INV_SAMPLE_RATE: MathT = 1.0 / SAMPLE_RATE as MathT;
+
+    pub fn samples_to_seconds(s: usize, r: MathT) -> std::time::Duration {
+        std::time::Duration::from_secs_f64(s as f64 * r as f64)
+    }
 
     #[test]
     fn test_zero() {
@@ -40,7 +44,7 @@ mod tests {
         ));
 
         let time = std::time::Duration::from_secs_f64(1.0 / s.get_frequency());
-        let samples = bae_rs::utils::seconds_to_samples(time, SAMPLE_RATE as MathT);
+        let samples = seconds_to_samples(time, SAMPLE_RATE as MathT);
 
         let omega = |t: f32, x: f32| 2.0 / t * x;
         let phi = |t: f32, x: f32| -2.0 * (x / t + 0.5).floor();
@@ -72,7 +76,7 @@ mod tests {
         ));
 
         let time = std::time::Duration::from_secs_f64(1.0 / s.get_frequency());
-        let samples = bae_rs::utils::seconds_to_samples(time, SAMPLE_RATE as MathT);
+        let samples = seconds_to_samples(time, SAMPLE_RATE as MathT);
 
         let omega = |f: f32, i: f32| f * 2.0 * std::f32::consts::PI * INV_SAMPLE_RATE as f32 * i;
 
@@ -95,7 +99,7 @@ mod tests {
         ));
 
         let time = std::time::Duration::from_secs_f64(1.0 / s.get_frequency());
-        let samples = bae_rs::utils::seconds_to_samples(time, SAMPLE_RATE as MathT);
+        let samples = seconds_to_samples(time, SAMPLE_RATE as MathT);
 
         let omega = (-2.0 * s.get_frequency() * INV_SAMPLE_RATE) as f32;
 
@@ -113,7 +117,7 @@ mod tests {
         assert!(float_equal(f, t.get_frequency(), std::f64::EPSILON, |x| x.abs()));
 
         let period = 1.0 / t.get_frequency() as f32;
-        let samples = bae_rs::utils::seconds_to_samples(
+        let samples = seconds_to_samples(
             std::time::Duration::from_secs_f32(period),
             SAMPLE_RATE as MathT,
         );

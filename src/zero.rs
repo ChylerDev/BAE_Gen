@@ -22,7 +22,7 @@ impl Generator for Zero {
 }
 
 impl BlockGenerator for Zero {
-    fn process(&mut self, x: &mut[SampleT]) {
+    fn process_block(&mut self, x: &mut[SampleT]) {
         for s in x {
             *s = 0.0;
         }

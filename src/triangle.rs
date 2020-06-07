@@ -50,7 +50,7 @@ impl Generator for Triangle {
 }
 
 impl BlockGenerator for Triangle {
-    fn process(&mut self, x: &mut[SampleT]) {
+    fn process_block(&mut self, x: &mut[SampleT]) {
         for s in x {
             *s = self.inc as SampleT;
 

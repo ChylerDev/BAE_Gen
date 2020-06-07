@@ -6,6 +6,8 @@
 #![warn(missing_docs)]
 #![doc(html_root_url = "https://docs.rs/bae_gen/0.14.0")]
 
+use bae_types::*;
+
 // pub mod mono_wav;
 pub mod noise;
 pub mod sawtooth;
@@ -53,5 +55,5 @@ pub trait Generator {
 /// The `BlockGenerator` trait defines types that create audio samples in blocks or chunks.
 pub trait BlockGenerator {
     /// Generates samples of rendered audio in blocks.
-    fn process(&mut self, x: &mut[SampleT]);
+    fn process_block(&mut self, x: &mut[SampleT]);
 }

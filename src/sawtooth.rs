@@ -46,7 +46,7 @@ impl Generator for Sawtooth {
 }
 
 impl BlockGenerator for Sawtooth {
-    fn process(&mut self, x: &mut[SampleT]) {
+    fn process_block(&mut self, x: &mut[SampleT]) {
         for s in x {
             *s = self.inc as SampleT;
 
