@@ -1,15 +1,12 @@
 #[cfg(test)]
 mod tests {
     use bae_gen::*;
-    use bae_types::*;
     use bae_debug::*;
+    use bae_types::*;
+    use bae_utils::*;
 
     const SAMPLE_RATE: usize = 48_000;
     const INV_SAMPLE_RATE: MathT = 1.0 / SAMPLE_RATE as MathT;
-
-    pub fn seconds_to_samples(s: std::time::Duration, r: MathT) -> usize {
-        (s.as_secs_f64() * r as f64).round() as usize
-    }
 
     #[test]
     fn test_zero() {
