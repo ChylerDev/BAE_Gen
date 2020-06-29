@@ -25,7 +25,7 @@ impl FreqMod for Triangle {
     }
 
     fn get_frequency(&self) -> Math {
-        Math(self.irate / (4.0 / self.sample_rate))
+        Math(self.irate.0 / (4.0 / self.sample_rate.0))
     }
 }
 
@@ -52,7 +52,7 @@ impl Generator for Triangle {
 impl BlockGenerator for Triangle {
     fn process_block(&mut self, x: &mut[Sample]) {
         for s in x {
-            *s.0 = self.inc.0 as FastMath;
+            (*s).0 = self.inc.0 as FastMath;
 
             self.inc.0 += self.irate.0;
 

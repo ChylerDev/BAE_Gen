@@ -43,14 +43,14 @@ impl Generator for Square {
 
         self.ind.0 += 1.0;
 
-        y
+        Sample(y)
     }
 }
 
 impl BlockGenerator for Square {
     fn process_block(&mut self, x: &mut[Sample]) {
         for s in x {
-            *s.0 = if self.ind.0 >= self.inv.0 && self.ind.0 < 2.0 * self.inv.0 {
+            (*s).0 = if self.ind.0 >= self.inv.0 && self.ind.0 < 2.0 * self.inv.0 {
                 -1.0
             } else {
                 1.0

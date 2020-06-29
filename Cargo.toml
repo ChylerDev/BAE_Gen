@@ -15,11 +15,11 @@ is-it-maintained-open-issues = { repository = "ChylerDev/BAE" }
 maintenance = { status = "actively-developed" }
 
 [dependencies]
-bae_types = { git = "https://github.com/ChylerDev/BAE_Types.git", branch = "master" }
+bae_types = { git = "https://github.com/ChylerDev/BAE_Types.git", branch = "master", version = "0.14.2" }
 lazy_static = "1"
 rand = "0.7"
 
 [dev-dependencies]
 bae_debug = { git = "https://github.com/ChylerDev/BAE_Debug.git", branch = "master" }
-bae_utils = { git = "https://github.com/ChylerDev/BAE_Utils.git", branch = "dev" }
+bae_utils = { git = "https://github.com/ChylerDev/BAE_Utils.git", branch = "master", version = "0.14.2" }
 version-sync = "0.9"

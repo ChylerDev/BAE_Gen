@@ -6,7 +6,7 @@ mod tests {
     use bae_utils::*;
 
     const SAMPLE_RATE: usize = 48_000;
-    const INV_SAMPLE_RATE: Math = 1.0 / SAMPLE_RATE as Math;
+    const INV_SAMPLE_RATE: Math = Math(1.0 / SAMPLE_RATE as AccurateMath);
 
     #[test]
     fn test_zero() {
@@ -37,16 +37,16 @@ mod tests {
 
     #[test]
     fn test_sawtooth() {
-        let mut s = Sawtooth::new(440.0, SAMPLE_RATE as Math);
+        let mut s = Sawtooth::new(440.0.into(), (SAMPLE_RATE as AccurateMath).into());
         assert!(float_equal(
             440.0,
-            s.get_frequency(),
+            s.get_frequency().0,
             AccurateMath::EPSILON,
             AccurateMath::abs
         ));
 
-        let time = std::time::Duration::from_secs_f64(1.0 / s.get_frequency());
-        let samples = seconds_to_samples(time, SAMPLE_RATE as Math);
+        let time = std::time::Duration::from_secs_f64(1.0 / s.get_frequency().0);
+        let samples = seconds_to_samples(time, (SAMPLE_RATE as AccurateMath).into());
 
         let omega = |t: f32, x: f32| 2.0 / t * x;
         let phi = |t: f32, x: f32| -2.0 * (x / t + 0.5).floor();
@@ -55,78 +55,78 @@ mod tests {
         for i in 0..samples {
             let y = s.process();
             let o = omega(
-                1.0 / s.get_frequency() as f32,
-                i as f32 * INV_SAMPLE_RATE as f32,
+                1.0 / s.get_frequency().0 as f32,
+                i as f32 * INV_SAMPLE_RATE.0 as f32,
             );
             let p = phi(
-                1.0 / s.get_frequency() as f32,
-                i as f32 * INV_SAMPLE_RATE as f32,
+                1.0 / s.get_frequency().0 as f32,
+                i as f32 * INV_SAMPLE_RATE.0 as f32,
             );
             let n = o + p;
-            assert!(float_equal(y, n, std::f32::EPSILON * 10.0, |x| x.abs()));
+            assert!(float_equal(y.0, n, FastMath::EPSILON * 10.0, FastMath::abs));
         }
     }
 
     #[test]
     fn test_sine() {
-        let mut s = Sine::new(440.0, SAMPLE_RATE as Math);
+        let mut s = Sine::new(440.0.into(), (SAMPLE_RATE as AccurateMath).into());
         assert!(float_equal(
             440.0,
-            s.get_frequency(),
+            s.get_frequency().0,
             AccurateMath::EPSILON,
             AccurateMath::abs
         ));
 
-        let time = std::time::Duration::from_secs_f64(1.0 / s.get_frequency());
-        let samples = seconds_to_samples(time, SAMPLE_RATE as Math);
+        let time = std::time::Duration::from_secs_f64(1.0 / s.get_frequency().0);
+        let samples = seconds_to_samples(time, (SAMPLE_RATE as AccurateMath).into());
 
-        let omega = |f: f32, i: f32| f * 2.0 * std::f32::consts::PI * INV_SAMPLE_RATE as f32 * i;
+        let omega = |f: f32, i: f32| f * 2.0 * std::f32::consts::PI * INV_SAMPLE_RATE.0 as f32 * i;
 
         for i in 0..samples {
             let y = s.process();
-            let n = omega(s.get_frequency() as f32, i as f32).sin();
+            let n = omega(s.get_frequency().0 as f32, i as f32).sin();
 
-            assert!(float_equal(y, n, std::f32::EPSILON * 10.0, |x| x.abs()));
+            assert!(float_equal(y.0, n, FastMath::EPSILON * 10.0, FastMath::abs));
         }
     }
 
     #[test]
     fn test_square() {
-        let mut s = Square::new(440.0, SAMPLE_RATE as Math);
+        let mut s = Square::new(440.0.into(), (SAMPLE_RATE as AccurateMath).into());
         assert!(float_equal(
             440.0,
-            s.get_frequency(),
+            s.get_frequency().0,
             AccurateMath::EPSILON,
             AccurateMath::abs
         ));
 
-        let time = std::time::Duration::from_secs_f64(1.0 / s.get_frequency());
-        let samples = seconds_to_samples(time, SAMPLE_RATE as Math);
+        let time = std::time::Duration::from_secs_f64(1.0 / s.get_frequency().0);
+        let samples = seconds_to_samples(time, (SAMPLE_RATE as AccurateMath).into());
 
-        let omega = (-2.0 * s.get_frequency() * INV_SAMPLE_RATE) as f32;
+        let omega = (-2.0 * s.get_frequency().0 * INV_SAMPLE_RATE.0) as f32;
 
         for i in 0..samples {
             let y = s.process();
             let n = (omega * i as f32 + 1.0).ceil() * 2.0 - 1.0;
-            assert!(float_equal(y, n, std::f32::EPSILON * 10.0, |x| x.abs()));
+            assert!(float_equal(y.0, n, FastMath::EPSILON * 10.0, FastMath::abs));
         }
     }
 
     #[test]
     fn test_triangle() {
         let f = 440.0;
-        let mut t = Triangle::new(f, SAMPLE_RATE as Math);
+        let mut t = Triangle::new(f.into(), (SAMPLE_RATE as AccurateMath).into());
         assert!(float_equal(
             f,
-            t.get_frequency(),
+            t.get_frequency().0,
             AccurateMath::EPSILON,
             AccurateMath::abs
         ));
 
-        let period = 1.0 / t.get_frequency() as f32;
+        let period = 1.0 / t.get_frequency().0 as f32;
         let samples = seconds_to_samples(
             std::time::Duration::from_secs_f32(period),
-            SAMPLE_RATE as Math,
+            (SAMPLE_RATE as AccurateMath).into(),
         );
 
         let gen_triangle = |t: f32| {
@@ -140,10 +140,10 @@ mod tests {
         let before = std::time::Instant::now();
         for i in 0..samples {
             let y = t.process();
-            let t = i as f32 * INV_SAMPLE_RATE as f32;
+            let t = i as f32 * INV_SAMPLE_RATE.0 as f32;
             let n = gen_triangle(t);
 
-            assert!(float_equal(y, n, std::f32::EPSILON * 10.0, |x| x.abs()));
+            assert!(float_equal(y.0, n, FastMath::EPSILON * 10.0, FastMath::abs));
         }
         let after = std::time::Instant::now();
         let duration = after - before;

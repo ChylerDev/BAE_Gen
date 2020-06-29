@@ -24,7 +24,7 @@ impl Generator for Zero {
 impl BlockGenerator for Zero {
     fn process_block(&mut self, x: &mut[Sample]) {
         for s in x {
-            *s = 0.0;
+            (*s).0 = 0.0;
         }
     }
 }

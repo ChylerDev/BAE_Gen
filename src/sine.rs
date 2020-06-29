@@ -24,14 +24,14 @@ pub struct Sine {
     ind: Math,
     inc: Math,
     sample_rate: Math,
-    table: &'static [Math],
+    table: &'static [AccurateMath],
 }
 
 impl FreqMod for Sine {
     fn new(f: Math, sample_rate: Math) -> Self {
         Sine {
             ind: Default::default(),
-            inc: (f.0 * WAVETABLE_SIZE as AccurateMath) / sample_rate.0,
+            inc: Math((f.0 * WAVETABLE_SIZE as AccurateMath) / sample_rate.0),
             sample_rate,
             table: WAVETABLE.as_slice(),
         }
@@ -55,9 +55,9 @@ impl Generator for Sine {
             k + 1.0
         } as usize;
         let k = k as usize;
-        let g = self.ind.0 - k;
+        let g = self.ind.0 - k as AccurateMath;
 
-        let y = ((1.0 - g) * self.table[k] + g * self.table[k1]) as Sample;
+        let y = ((1.0 - g) * self.table[k] + g * self.table[k1]) as FastMath;
 
         self.ind.0 += self.inc.0;
 
@@ -65,7 +65,7 @@ impl Generator for Sine {
             self.ind.0 -= WAVETABLE_SIZE as AccurateMath - 1.0;
         }
 
-        y
+        Sample(y)
     }
 }
 
@@ -79,9 +79,9 @@ impl BlockGenerator for Sine {
                 k + 1.0
             } as usize;
             let k = k as usize;
-            let g = self.ind.0 - k;
+            let g = self.ind.0 - k as AccurateMath;
 
-            *s.0 = ((1.0 - g) * self.table[k] + g * self.table[k1]) as Sample;
+            (*s).0 = ((1.0 - g) * self.table[k] + g * self.table[k1]) as FastMath;
 
             self.ind.0 += self.inc.0;
 

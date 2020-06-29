@@ -17,13 +17,13 @@ impl FreqMod for Sawtooth {
     fn new(f: Math, sample_rate: Math) -> Self {
         Sawtooth {
             r: sample_rate,
-            irate: Math(2.0 * f.0 / sample_rate),
+            irate: Math(2.0 * f.0 / sample_rate.0),
             inc: Default::default(),
         }
     }
 
     fn set_frequency(&mut self, f: Math) {
-        self.irate.0 = Math(2.0 * f.0 / self.r.0);
+        self.irate.0 = 2.0 * f.0 / self.r.0;
     }
 
     fn get_frequency(&self) -> Math {
@@ -48,7 +48,7 @@ impl Generator for Sawtooth {
 impl BlockGenerator for Sawtooth {
     fn process_block(&mut self, x: &mut[Sample]) {
         for s in x {
-            *s.0 = self.inc.0 as FastMath;
+            (*s).0 = self.inc.0 as FastMath;
 
             self.inc.0 += self.irate.0;
             if self.inc.0 >= 1.0 {

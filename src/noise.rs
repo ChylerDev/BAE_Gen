@@ -3,6 +3,7 @@
 //! A white noise generator.
 
 use super::*;
+
 use rand;
 
 #[derive(Default, Clone)]
@@ -24,7 +25,7 @@ impl Generator for Noise {
     fn process(&mut self) -> Sample {
         use rand::Rng;
 
-        self.engine.gen::<Sample>() * 2.0 - 1.0
+        Sample(self.engine.gen::<FastMath>() * 2.0 - 1.0)
     }
 }
 
@@ -33,7 +34,7 @@ impl BlockGenerator for Noise {
         use rand::Rng;
 
         for s in x {
-            *s = self.engine.gen::<Sample>() * 2.0 - 1.0;
+            (*s).0 = self.engine.gen::<FastMath>() * 2.0 - 1.0;
         }
     }
 }
