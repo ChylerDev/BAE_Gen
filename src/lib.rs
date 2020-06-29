@@ -2,6 +2,9 @@
 //!
 //! Crate including many of the common/basic sound types including sine,
 //! sawtooth, square, white noise, and more.
+//!
+//! This crate was created for use as a base of bare essentials from which to
+//! build more complex systems from (e.g. more complex synthesizers and effects).
 
 #![warn(missing_docs)]
 #![doc(html_root_url = "https://docs.rs/bae_gen/0.14.0")]
@@ -33,7 +36,7 @@ pub trait FreqMod {
     ///
     /// * `f` - The frequency for the new object
     /// * `sample_rate` - The sample rate that will be used.
-    fn new(f: MathT, sample_rate: MathT) -> Self;
+    fn new(f: Math, sample_rate: Math) -> Self;
 
     /// Sets the frequency of the given object.
     ///
