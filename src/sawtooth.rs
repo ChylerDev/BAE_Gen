@@ -8,51 +8,51 @@ use super::*;
 
 /// Struct for generating sawtooth samples.
 pub struct Sawtooth {
-    r: MathT,
-    irate: MathT,
-    inc: MathT,
+    r: Math,
+    irate: Math,
+    inc: Math,
 }
 
 impl FreqMod for Sawtooth {
-    fn new(f: MathT, sample_rate: MathT) -> Self {
+    fn new(f: Math, sample_rate: Math) -> Self {
         Sawtooth {
             r: sample_rate,
-            irate: 2.0 * f / sample_rate,
-            inc: 0.0,
+            irate: Math(2.0 * f.0 / sample_rate),
+            inc: Default::default(),
         }
     }
 
-    fn set_frequency(&mut self, f: MathT) {
-        self.irate = 2.0 * f / self.r;
+    fn set_frequency(&mut self, f: Math) {
+        self.irate.0 = Math(2.0 * f.0 / self.r.0);
     }
 
-    fn get_frequency(&self) -> MathT {
-        self.irate * self.r / 2.0
+    fn get_frequency(&self) -> Math {
+        Math(self.irate.0 * self.r.0 / 2.0)
     }
 }
 
 impl Generator for Sawtooth {
-    fn process(&mut self) -> SampleT {
-        let y = self.inc;
+    fn process(&mut self) -> Sample {
+        let y = self.inc.0;
 
-        self.inc += self.irate;
+        self.inc.0 += self.irate.0;
 
-        if self.inc >= 1.0 {
-            self.inc -= 2.0;
+        if self.inc.0 >= 1.0 {
+            self.inc.0 -= 2.0;
         }
 
-        y as SampleT
+        Sample(y as FastMath)
     }
 }
 
 impl BlockGenerator for Sawtooth {
-    fn process_block(&mut self, x: &mut[SampleT]) {
+    fn process_block(&mut self, x: &mut[Sample]) {
         for s in x {
-            *s = self.inc as SampleT;
+            *s.0 = self.inc.0 as FastMath;
 
-            self.inc += self.irate;
-            if self.inc >= 1.0 {
-                self.inc -= 2.0;
+            self.inc.0 += self.irate.0;
+            if self.inc.0 >= 1.0 {
+                self.inc.0 -= 2.0;
             }
         }
     }
@@ -63,7 +63,7 @@ impl Clone for Sawtooth {
         Sawtooth {
             r: self.r,
             irate: self.irate,
-            inc: 0.0,
+            inc: Default::default(),
         }
     }
 }

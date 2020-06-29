@@ -1,6 +1,6 @@
-//! # Generators
+//! # BAE_Gen
 //!
-//! Module including many of the common/basic sound types, including sine,
+//! Crate including many of the common/basic sound types including sine,
 //! sawtooth, square, white noise, and more.
 
 #![warn(missing_docs)]
@@ -40,20 +40,21 @@ pub trait FreqMod {
     /// # Parameters
     ///
     /// * `f` - The new frequency.
-    fn set_frequency(&mut self, f: MathT);
+    fn set_frequency(&mut self, f: Math);
 
     /// Gets the current frequency of the given object.
-    fn get_frequency(&self) -> MathT;
+    fn get_frequency(&self) -> Math;
 }
 
 /// The `Generator` trait defines types that create audio samples.
 pub trait Generator {
     /// Generates a rendered audio sample
-    fn process(&mut self) -> SampleT;
+    fn process(&mut self) -> Sample;
 }
 
-/// The `BlockGenerator` trait defines types that create audio samples in blocks or chunks.
+/// The `BlockGenerator` trait defines types that create audio samples in blocks
+/// or chunks.
 pub trait BlockGenerator {
     /// Generates samples of rendered audio in blocks.
-    fn process_block(&mut self, x: &mut[SampleT]);
+    fn process_block(&mut self, x: &mut[Sample]);
 }

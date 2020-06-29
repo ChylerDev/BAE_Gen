@@ -16,13 +16,13 @@ impl Zero {
 }
 
 impl Generator for Zero {
-    fn process(&mut self) -> SampleT {
-        0.0
+    fn process(&mut self) -> Sample {
+        Default::default()
     }
 }
 
 impl BlockGenerator for Zero {
-    fn process_block(&mut self, x: &mut[SampleT]) {
+    fn process_block(&mut self, x: &mut[Sample]) {
         for s in x {
             *s = 0.0;
         }

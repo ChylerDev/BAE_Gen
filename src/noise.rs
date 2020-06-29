@@ -21,19 +21,19 @@ impl Noise {
 }
 
 impl Generator for Noise {
-    fn process(&mut self) -> SampleT {
+    fn process(&mut self) -> Sample {
         use rand::Rng;
 
-        self.engine.gen::<SampleT>() * 2.0 - 1.0
+        self.engine.gen::<Sample>() * 2.0 - 1.0
     }
 }
 
 impl BlockGenerator for Noise {
-    fn process_block(&mut self, x: &mut[SampleT]) {
+    fn process_block(&mut self, x: &mut[Sample]) {
         use rand::Rng;
 
         for s in x {
-            *s = self.engine.gen::<SampleT>() * 2.0 - 1.0;
+            *s = self.engine.gen::<Sample>() * 2.0 - 1.0;
         }
     }
 }

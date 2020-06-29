@@ -6,16 +6,21 @@ mod tests {
     use bae_utils::*;
 
     const SAMPLE_RATE: usize = 48_000;
-    const INV_SAMPLE_RATE: MathT = 1.0 / SAMPLE_RATE as MathT;
+    const INV_SAMPLE_RATE: Math = 1.0 / SAMPLE_RATE as Math;
 
     #[test]
     fn test_zero() {
         let mut z = Zero::new();
 
         for _ in 0..SAMPLE_RATE {
-            assert!(float_equal(z.process(), 0.0, std::f32::EPSILON, |x| x.abs()));
+            assert!(float_equal(z.process().0, 0.0, FastMath::EPSILON, FastMath::abs));
         }
     }
+
+    // #[test]
+    // fn test_monowav() {
+    //     // todo!();
+    // }
 
     #[test]
     fn test_noise() {
@@ -32,16 +37,16 @@ mod tests {
 
     #[test]
     fn test_sawtooth() {
-        let mut s = Sawtooth::new(440.0, SAMPLE_RATE as MathT);
+        let mut s = Sawtooth::new(440.0, SAMPLE_RATE as Math);
         assert!(float_equal(
             440.0,
             s.get_frequency(),
-            std::f64::EPSILON,
-            |x| x.abs()
+            AccurateMath::EPSILON,
+            AccurateMath::abs
         ));
 
         let time = std::time::Duration::from_secs_f64(1.0 / s.get_frequency());
-        let samples = seconds_to_samples(time, SAMPLE_RATE as MathT);
+        let samples = seconds_to_samples(time, SAMPLE_RATE as Math);
 
         let omega = |t: f32, x: f32| 2.0 / t * x;
         let phi = |t: f32, x: f32| -2.0 * (x / t + 0.5).floor();
@@ -64,16 +69,16 @@ mod tests {
 
     #[test]
     fn test_sine() {
-        let mut s = Sine::new(440.0, SAMPLE_RATE as MathT);
+        let mut s = Sine::new(440.0, SAMPLE_RATE as Math);
         assert!(float_equal(
             440.0,
             s.get_frequency(),
-            std::f64::EPSILON,
-            |x| x.abs()
+            AccurateMath::EPSILON,
+            AccurateMath::abs
         ));
 
         let time = std::time::Duration::from_secs_f64(1.0 / s.get_frequency());
-        let samples = seconds_to_samples(time, SAMPLE_RATE as MathT);
+        let samples = seconds_to_samples(time, SAMPLE_RATE as Math);
 
         let omega = |f: f32, i: f32| f * 2.0 * std::f32::consts::PI * INV_SAMPLE_RATE as f32 * i;
 
@@ -87,16 +92,16 @@ mod tests {
 
     #[test]
     fn test_square() {
-        let mut s = Square::new(440.0, SAMPLE_RATE as MathT);
+        let mut s = Square::new(440.0, SAMPLE_RATE as Math);
         assert!(float_equal(
             440.0,
             s.get_frequency(),
-            std::f64::EPSILON,
-            |x| x.abs()
+            AccurateMath::EPSILON,
+            AccurateMath::abs
         ));
 
         let time = std::time::Duration::from_secs_f64(1.0 / s.get_frequency());
-        let samples = seconds_to_samples(time, SAMPLE_RATE as MathT);
+        let samples = seconds_to_samples(time, SAMPLE_RATE as Math);
 
         let omega = (-2.0 * s.get_frequency() * INV_SAMPLE_RATE) as f32;
 
@@ -110,13 +115,18 @@ mod tests {
     #[test]
     fn test_triangle() {
         let f = 440.0;
-        let mut t = Triangle::new(f, SAMPLE_RATE as MathT);
-        assert!(float_equal(f, t.get_frequency(), std::f64::EPSILON, |x| x.abs()));
+        let mut t = Triangle::new(f, SAMPLE_RATE as Math);
+        assert!(float_equal(
+            f,
+            t.get_frequency(),
+            AccurateMath::EPSILON,
+            AccurateMath::abs
+        ));
 
         let period = 1.0 / t.get_frequency() as f32;
         let samples = seconds_to_samples(
             std::time::Duration::from_secs_f32(period),
-            SAMPLE_RATE as MathT,
+            SAMPLE_RATE as Math,
         );
 
         let gen_triangle = |t: f32| {
@@ -139,9 +149,4 @@ mod tests {
         let duration = after - before;
         println!("Test ran in {} seconds", duration.as_secs_f64());
     }
-
-    // #[test]
-    // fn test_monowav() {
-    //     // todo!();
-    // }
 }
